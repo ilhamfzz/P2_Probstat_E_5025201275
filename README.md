@@ -202,3 +202,8 @@ pelat muka (A, B dan C) pada keluaran cahaya tabung osiloskop. Percobaan
 dilakukan sebanyak 27 kali dan didapat data sebagai berikut: https://drive.google.com/file/d/1aLUOdw_LVJq6VQrQEkuQhZ8FW43FemTJ/view
 
 #### 5a
+Baca file GTL.csv pada yang telah di download pada link tersebut :
+```R
+GTL <- read_csv("GTL.csv")
+head(GTL)
+```
