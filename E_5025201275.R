@@ -96,7 +96,7 @@ library(multcompView)
 library(dplyr)
 
 #5a
-GTL <- read_csv("GTL.csv")
+GTL <- read.csv("https://drive.google.com/u/0/uc?id=1aLUOdw_LVJq6VQrQEkuQhZ8FW43FemTJ&export=download")
 head(GTL)
 
 str(GTL)
