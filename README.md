@@ -3,7 +3,6 @@
 #### Nama    : Moh. Ilham Fakhri Zamzami
 #### NRP     : 5025201275
 #### Kelas   : Probabilitas Statistik E
-
 </br>
 
 ### Nomer 1
@@ -14,6 +13,7 @@ kadar saturasi oksigen dari 9 responden tersebut. Kemudian, 9 responden tersebut
 diminta melakukan aktivitas 𝐴. Setelah 15 menit, peneliti tersebut mencatat kembali
 kadar saturasi oksigen dari 9 responden tersebut. Berikut data dari 9 responden
 mengenai kadar saturasi oksigen sebelum dan sesudah melakukan aktivitas 𝐴
+
 ![image](https://user-images.githubusercontent.com/94663388/170873512-afab1b8f-e896-4376-ada0-8881b0f42d66.png)
 
 
@@ -131,3 +131,74 @@ keputusannya dapat dibuat dengan `t.test`
 #### 3f
 Kesimpulannya tidak ditemukan perbedaan rata-rata jika dilihat dari uji statistik, namun jika dilihat dari nilai kritikal ditemukan perbedaan tetapi tidak signifikan 
 
+
+### Nomer 4
+Seorang Peneliti sedang meneliti spesies dari kucing di ITS . Dalam penelitiannya
+ia mengumpulkan data tiga spesies kucing yaitu kucing oren, kucing hitam dan
+kucing putih dengan panjangnya masing-masing.
+Jika diketahui dataset https://intip.in/datasetprobstat1
+H0 : Tidak ada perbedaan panjang antara ketiga spesies atau rata-rata panjangnya
+sama
+
+#### 4a
+Ambil data pada link dan inisialisasi pada variabel dataset terlebih dahulu :
+```R
+dataset <- read.table(url("https://rstatisticsandresearch.weebly.com/uploads/1/0/2/6/1026585/onewayanova.txt"))
+dim(dataset)
+head(dataset)
+```
+Kemudian grup variabel dataset
+```R
+dataset$V1 <- as.factor(dataset$V1)
+dataset$V1 = factor(dataset$V1,labels = c("Kucing Oren","Kucing Hitam","Kucing Putih","Kucing Oren"))
+```
+Cek apakah dia menyimpan nilai pada grupnya
+```R
+class(dataset$V1)
+```
+bagi tiap value ke tiga bagian pada tiap grup kucing
+```R
+group1 <- subset(dataset, V1=="Kucing Oren")
+group2 <- subset(dataset, V1=="Kucing Hitam")
+group3 <- subset(dataset, V1=="Kucing Putih")
+```
+
+#### 4b
+Untuk mencari Homogeneity of variances gunakan syntax `barlett.test` seperti sc dibawah ini :
+```R
+bartlett.test(Length~V1, data=dataoneway)
+```
+didapat nilai p-value = 0.8054. Maka Bartlett's K-squared punya nilai 0.43292 dan df = 2
+
+#### 4c
+```R
+qqnorm(group1$Length)
+qqline(group1$Length)
+```
+![nomer 4c (4)](https://user-images.githubusercontent.com/94663388/170876417-07fc933a-88ed-4ebb-9013-a85b27bed90e.png)
+
+#### 4d
+nilai p-value-nya adalah 0.8054
+
+#### 4e
+gunakan syntax `anova` dan Post-hoc `Tukey HSD` seperti sc dibawah ini :
+```R
+model1 <- lm(Length~Group, data=dataset)
+anova(model1)
+TukeyHSD(aov(model1))
+```
+
+#### 4f
+Visualisasinya dapat menggunakan sc berikut ini :
+```R
+library(ggplot2)
+ggplot(dataoneway, aes(x = Group, y = Length)) + geom_boxplot(fill = "grey80", colour = "black") + scale_x_discrete() + xlab("Treatment Group") +  ylab("Length (cm)")
+```
+
+### 5
+Data yang digunakan merupakan hasil eksperimen yang dilakukan untuk
+mengetahui pengaruh suhu operasi (100˚C, 125˚C dan 150˚C) dan tiga jenis kaca
+pelat muka (A, B dan C) pada keluaran cahaya tabung osiloskop. Percobaan
+dilakukan sebanyak 27 kali dan didapat data sebagai berikut: https://drive.google.com/file/d/1aLUOdw_LVJq6VQrQEkuQhZ8FW43FemTJ/view
+
+#### 5a
