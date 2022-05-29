@@ -3,7 +3,7 @@
 #### Nama    : Moh. Ilham Fakhri Zamzami
 #### NRP     : 5025201275
 #### Kelas   : Probabilitas Statistik E
-</br>
+___
 
 ### Nomer 1
 Seorang peneliti melakukan penelitian mengenai pengaruh aktivitas 𝐴 terhadap
@@ -70,7 +70,7 @@ mencatat jarak yang mereka tempuh. Jika sampel acak menunjukkan rata-rata
 #### 2a
 Apakah Anda setuju dengan klaim tersebut?
 
-****Setuju****
+> ****Setuju****
 
 #### 2b
 
