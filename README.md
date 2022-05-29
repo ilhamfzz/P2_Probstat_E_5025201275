@@ -204,6 +204,71 @@ dilakukan sebanyak 27 kali dan didapat data sebagai berikut: https://drive.googl
 #### 5a
 Baca file GTL.csv pada yang telah di download pada link tersebut :
 ```R
-GTL <- read_csv("GTL.csv")
+GTL <- read.csv("https://drive.google.com/u/0/uc?id=1aLUOdw_LVJq6VQrQEkuQhZ8FW43FemTJ&export=download")
 head(GTL)
 ```
+![image](https://user-images.githubusercontent.com/94663388/170879822-fbf4972f-09e5-4354-bc85-5b0ef9826c93.png)
+
+Kemudia lakukan observasi pada data :
+```R
+str(GTL)
+```
+![image](https://user-images.githubusercontent.com/94663388/170879882-a04b0848-fae9-4826-9b1f-9ea3d02aed1a.png)
+
+Lalu visualisasi menggunakan command berikut ini :
+```R
+qplot(x = Temp, y = Light, geom = "point", data = GTL) + facet_grid(.~Glass, labeller = label_both)
+```
+![image](https://user-images.githubusercontent.com/94663388/170879909-63c41b72-bd77-4a19-b0b8-529673425017.png)
+
+#### 5b
+Buat variabel as factor sebagai `anova` terlebih dahulu
+```R
+GTL$Glass <- as.factor(GTL$Glass)
+GTL$Temp_Factor <- as.factor(GTL$Temp)
+str(GTL)
+```
+![image](https://user-images.githubusercontent.com/94663388/170880122-0b37fa86-8959-4bba-abc5-0599415da576.png)
+```R
+anova_test <- aov(Light ~ Glass*Temp_Factor, data = GTL)
+```
+kemudian, lakukan aov (analysis of variance) seperti command dibawah ini :
+```R
+summary(anova_test)
+```
+![image](https://user-images.githubusercontent.com/94663388/170880334-a3c4ade7-ef05-47d7-96e1-bb759bea316a.png)
+
+#### 5c
+Gunakan `group_by` dan lakukan `summarise` sesuai mean dan standar deviasi yang berlaku
+```R
+sum_data <- group_by(GTL, Glass, Temp) %>%
+  summarise(mean=mean(Light), sd=sd(Light)) %>%
+  arrange(desc(mean))
+print(sum_data)
+```
+Berikut tampilan variabel sum_data  pada global environment setelah proses diatas : </br>
+![image](https://user-images.githubusercontent.com/94663388/170880544-c3488bd8-6563-43f3-8ef0-415454ba55a6.png)
+
+#### 5d
+gunakan syntax `TukeyHSD` seperti sourecode berikut ini :
+```R
+tukey_test <- TukeyHSD(anova_test)
+print(tukey_test)
+```
+![image](https://user-images.githubusercontent.com/94663388/170880815-3d3aa9d3-2744-422e-aeff-2f4b1f7a49ae.png)
+
+#### 5e
+Buat compact letter-nya terlebih dahulu dengan sc sebagai berikut :
+```R
+tukey.cld <- multcompLetters4(anova_test, tukey_test)
+print(tukey.cld)
+```
+![image](https://user-images.githubusercontent.com/94663388/170880938-1589b5f5-859d-4293-bff0-7b97baeddba9.png)
+
+Kemudian tambahkan compact letter display tersebut ke tabel bersama dengan means dan sd :
+```R
+cld <- as.data.frame.list(tukey.cld$`Glass:Temp_Factor`)
+sum_data$Tukey <- cld$Letters
+print(sum_data)
+```
+![image](https://user-images.githubusercontent.com/94663388/170881545-8a808589-d69f-49be-a2b4-b78c00fdac1c.png)
